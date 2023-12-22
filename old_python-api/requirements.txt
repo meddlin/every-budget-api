@@ -1,0 +1,5 @@
+###### Requirements without Version Specifiers ######
+flask
+psycopg2
+
+###### Requirements with Version Specifiers ######
