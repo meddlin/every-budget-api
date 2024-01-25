@@ -7,5 +7,6 @@ namespace EveryBudgetApi.Controllers
     [ApiController]
     public class BudgetItems : ControllerBase
     {
+
     }
 }
