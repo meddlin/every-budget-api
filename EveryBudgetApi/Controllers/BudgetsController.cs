@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using EveryBudgetApi.ViewModels;
 using Microsoft.AspNetCore.Cors;
+using EveryBudgetApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,6 +12,24 @@ namespace EveryBudgetApi.Controllers
     [ApiController]
     public class BudgetsController : ControllerBase
     {
+        private readonly EveryBudgetDbContext _context;
+        private readonly IConfiguration _configuration;
+
+        public BudgetsController(EveryBudgetDbContext context, IConfiguration configuration)
+        {
+            _context = context;
+            _configuration = configuration;
+        }
+
+
+        [HttpGet]
+        public string Test()
+        {
+            var test = _context.Categories.ToList();
+
+            return $@"# of Categories: {test.Count()}";
+        }
+
         // GET: api/values
         [HttpGet]
         public List<BudgetViewModel> Get()

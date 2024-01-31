@@ -14,6 +14,9 @@ public class EveryBudgetDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         options.UseNpgsql(Configuration.GetConnectionString("LocalDatabase"));
-        // options.UseNpgsql(Configuration.GetConnectionString("RDS-DB"));
     }
+
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<BudgetItem> BudgetItems { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 }
