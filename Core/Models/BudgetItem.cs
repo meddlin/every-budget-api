@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EveryBudgetApi.Models
+namespace EveryBudgetCore.Models
 {
     [Table("budget_items")]
     public class BudgetItem
@@ -12,7 +12,7 @@ namespace EveryBudgetApi.Models
 
         /* keys & relation fields */
         [Column("category_id")] public Guid CategoryId { get; set; }
-        //[Column("budget_id")] public Guid BudgetId { get; set; }
+        // [Column("budget_id")] public Guid BudgetId { get; set; }
 
         /* data fields */
         [Column("name")] public string Name { get; set; }

@@ -16,7 +16,7 @@ public class EveryBudgetDbContext : DbContext
         options.UseNpgsql(Configuration.GetConnectionString("LocalDatabase"));
     }
 
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<BudgetItem> BudgetItems { get; set; }
-    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<EveryBudgetCore.Models.Category> Categories { get; set; }
+    public DbSet<EveryBudgetCore.Models.BudgetItem> BudgetItems { get; set; }
+    public DbSet<EveryBudgetCore.Models.Transaction> Transactions { get; set; }
 }

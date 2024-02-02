@@ -10,5 +10,5 @@ public class Budget
     public Guid Id { get; set; }
     public DateTime DateUpdated { get; set; }
 
-    public List<Category> Categories { get; set; }
+    public List<EveryBudgetCore.Models.Category> Categories { get; set; }
 }
