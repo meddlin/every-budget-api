@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using EveryBudgetCore.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace UtilityTester
@@ -25,7 +26,7 @@ namespace UtilityTester
                 .RuleFor(c => c.DateUpdated, f => f.Date.Recent())
                 .RuleFor(c => c.Name, f => f.Lorem.Word());
 
-            List<EveryBudgetCore.Models.Category> test = categories.Generate(1);
+            List<EveryBudgetCore.Models.Category> test = categories.Generate(3);
 
             var budgetItemGenerator = new Faker<EveryBudgetCore.Models.BudgetItem>()
                 .RuleFor(b => b.Id, f => f.Random.Guid())
@@ -35,12 +36,10 @@ namespace UtilityTester
                 .RuleFor(b => b.Name, f => f.Lorem.Word())
                 .RuleFor(b => b.Planned, f => f.Random.Decimal())
                 .RuleFor(b => b.Spent, f => f.Random.Decimal());
-            List<EveryBudgetCore.Models.BudgetItem> budgetItems = budgetItemGenerator.Generate(2);
+            List<EveryBudgetCore.Models.BudgetItem> budgetItems = budgetItemGenerator.Generate(3);
             budgetItems[0].CategoryId = test[0].Id;
             budgetItems[1].CategoryId = test[0].Id;
             budgetItems[2].CategoryId = test[0].Id;
-
-
 
             return test;
         }
@@ -53,30 +52,37 @@ namespace UtilityTester
             Console.WriteLine("Welcome to Utility Tester!");
             Console.WriteLine("");
 
-            FakeBudget.TestFunction();
+            List<Category> categories = FakeBudget.TestFunction();
 
             using (var db = new EveryBudgetDbContext())
             {
-                Console.WriteLine($"Categories: contains ({db.Categories.Count()})");
-                foreach (var category in db.Categories)
+                foreach (var cat in categories)
                 {
-                    Console.WriteLine($"  {category.Name}");
+                    db.Categories.Add(cat);
                 }
 
-                // TODO: Add ability to check if table exists
-                //      NOTE: This will require custom SQL: https://stackoverflow.com/questions/6100969/entity-framework-how-to-check-if-table-exists
-                Console.WriteLine($"BudgetItems: contains ({db.BudgetItems.Count()})");
-                foreach (var budgetItem in db.BudgetItems)
-                {
-                    Console.WriteLine($"  {budgetItem.Name}");
-                }
+                //Console.WriteLine($"Categories: contains ({db.Categories.Count()})");
+                //foreach (var category in db.Categories)
+                //{
+                //    Console.WriteLine($"  {category.Name}");
+                //}
 
-                Console.WriteLine($"Transactions: contains ({db.Transactions.Count()})");
-                foreach (var transaction in db.Transactions)
-                {
-                    Console.WriteLine($"  {transaction.Vendor}");
-                }
+                //// TODO: Add ability to check if table exists
+                ////      NOTE: This will require custom SQL: https://stackoverflow.com/questions/6100969/entity-framework-how-to-check-if-table-exists
+                //Console.WriteLine($"BudgetItems: contains ({db.BudgetItems.Count()})");
+                //foreach (var budgetItem in db.BudgetItems)
+                //{
+                //    Console.WriteLine($"  {budgetItem.Name}");
+                //}
+
+                //Console.WriteLine($"Transactions: contains ({db.Transactions.Count()})");
+                //foreach (var transaction in db.Transactions)
+                //{
+                //    Console.WriteLine($"  {transaction.Vendor}");
+                //}
             }
+
+            Console.WriteLine("done inserting...");
         }
     }
 }

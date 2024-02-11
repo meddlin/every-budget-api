@@ -56,7 +56,7 @@ public class FakeBudget
             .RuleFor(b => b.Name, f => f.Lorem.Word())
             .RuleFor(b => b.Planned, f => f.Random.Decimal())
             .RuleFor(b => b.Spent, f => f.Random.Decimal());
-        List<EveryBudgetCore.Models.BudgetItem> budgetItems = budgetItemGenerator.Generate(2);
+        List<EveryBudgetCore.Models.BudgetItem> budgetItems = budgetItemGenerator.Generate(3);
         budgetItems[0].CategoryId = test[0].Id;
         budgetItems[1].CategoryId = test[0].Id;
         budgetItems[2].CategoryId = test[0].Id;
