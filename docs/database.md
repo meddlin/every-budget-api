@@ -75,5 +75,22 @@ ALTER TABLE IF EXISTS public.budget_items
     OWNER to postgres;
 ```
 
+#### Sample `INSERT`
+
+```sql
+INSERT INTO public.budget_items(
+	id, date_created, date_updated, category_id, name, planned, spent, description)
+	VALUES (
+		uuid_generate_v4(), 
+		current_timestamp, 
+		current_timestamp, 
+		'b31070db-78bd-4919-b72d-de86f26cf391',
+		'SampleBudgetItem', 
+		100.00, 
+		25.00, 
+		'a sample budget item for testing'
+);
+```
+
 ### Transactions
 
