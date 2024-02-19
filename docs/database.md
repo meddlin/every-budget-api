@@ -46,6 +46,51 @@ INSERT INTO public.categories(
 
 ### BudgetItems
 
+- id -> UUID
+- date_created -> timestamp
+- date_updated -> timestamp
+- category_id -> UUID
+- name -> varchar
+- planned -> numeric
+- spent -> numeric
+- description -> varchar
+
+```sql
+CREATE TABLE IF NOT EXISTS public.budget_items
+(
+    id uuid NOT NULL,
+    date_created timestamp with time zone NOT NULL,
+    date_updated timestamp with time zone NOT NULL,
+    category_id uuid,
+    name character varying COLLATE pg_catalog."default",
+    planned numeric(12,2),
+    spent numeric(12,2),
+    description character varying COLLATE pg_catalog."default",
+    CONSTRAINT budget_items_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.budget_items
+    OWNER to postgres;
+```
+
+#### Sample `INSERT`
+
+```sql
+INSERT INTO public.budget_items(
+	id, date_created, date_updated, category_id, name, planned, spent, description)
+	VALUES (
+		uuid_generate_v4(), 
+		current_timestamp, 
+		current_timestamp, 
+		'b31070db-78bd-4919-b72d-de86f26cf391',
+		'SampleBudgetItem', 
+		100.00, 
+		25.00, 
+		'a sample budget item for testing'
+);
+```
 
 ### Transactions
 
