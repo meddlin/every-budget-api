@@ -19,6 +19,5 @@ namespace EveryBudgetCore.Models
         [Column("planned")] public decimal Planned { get; set; }
         [Column("spent")] public decimal Spent { get; set; }
         [Column("description")] public string Description { get; set; }
-
     }
 }

@@ -2,6 +2,7 @@
 using EveryBudgetApi.ViewModels;
 using Microsoft.AspNetCore.Cors;
 using EveryBudgetApi.Models;
+using EveryBudgetCore.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,7 +22,6 @@ namespace EveryBudgetApi.Controllers
             _configuration = configuration;
         }
 
-
         [HttpGet]
         public string Test()
         {
@@ -32,7 +32,7 @@ namespace EveryBudgetApi.Controllers
 
         // GET: api/values
         [HttpGet]
-        public List<BudgetViewModel> Get()
+        public BudgetViewModel Get()
         {
             var x = new BudgetViewModel() {
                 Id = Guid.NewGuid(),
@@ -81,7 +81,17 @@ namespace EveryBudgetApi.Controllers
                 }
             };
 
-            return new List<BudgetViewModel>() { x};
+            // NEW ATTEMPT
+            List<CategoryViewModel> categoryVM = new List<CategoryViewModel>();
+
+            List<Category> categoriesData = _context.Categories.ToList();
+            foreach(Category category in categoriesData)
+            {
+                List<BudgetItem> biList = _context.BudgetItems.Where(bi => category.Id == bi.CategoryId).ToList();
+                categoryVM.Add(new CategoryViewModel(category, biList));
+            }
+
+            return new BudgetViewModel(categoryVM);
         }
 
         // GET api/values/5
