@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EveryBudgetCore.Models
 {
+    [Table("transactions")]
     public class Transaction
     {
         /* meta-fields, for DB metrics */

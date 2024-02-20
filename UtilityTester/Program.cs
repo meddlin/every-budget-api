@@ -29,12 +29,16 @@ namespace UtilityTester
 
             // TableActions.ListTables(new EveryBudgetDbContext());
 
-            List<Category> categories = BudgetActions.GenerateSampleBudget();
-            using (var db = new EveryBudgetDbContext())
-            {
-                BudgetActions.StoreCategories(db, categories);
-            }
-            
+            //List<Category> categories = BudgetActions.GenerateSampleBudget();
+            //using (var db = new EveryBudgetDbContext())
+            //{
+            //    BudgetActions.StoreCategories(db, categories);
+            //}
+
+            BudgetActions.StoreTransactions(
+                new EveryBudgetDbContext(), TransactionGenerator.Generate()
+            );
+
 
             Console.WriteLine("done inserting...");
         }

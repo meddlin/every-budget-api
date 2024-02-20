@@ -86,5 +86,11 @@ namespace UtilityTester
             db.Categories.AddRange(categories);
             db.SaveChanges();
         }
+
+        public static void StoreTransactions(EveryBudgetDbContext db, List<Transaction> transactions)
+        {
+            db.Transactions.AddRange(transactions);
+            db.SaveChanges();
+        }
     }
 }
