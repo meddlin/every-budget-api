@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using EveryBudgetApi.ViewModels;
+using EveryBudgetApi.Models;
 
 namespace EveryBudgetApi.Controllers
 {
@@ -8,10 +9,24 @@ namespace EveryBudgetApi.Controllers
     [ApiController]
     public class TransactionsController : ControllerBase
     {
+        private readonly EveryBudgetDbContext _context;
+        private readonly IConfiguration _configuration;
+
+        public TransactionsController(EveryBudgetDbContext context, IConfiguration configuration)
+        {
+            _context = context;
+            _configuration = configuration;
+        }
+
         [HttpGet]
         public IEnumerable<TransactionViewModel> Get()
         {
-            return new List<TransactionViewModel>();
+            List<EveryBudgetCore.Models.Transaction> data = _context.Transactions.Select(t => t).ToList();
+            var tranList = new List<TransactionViewModel>();
+
+            data.ForEach(transaction => tranList.Add(new TransactionViewModel(transaction)));
+
+            return tranList;
         }
 
         [HttpGet("{id}")]
