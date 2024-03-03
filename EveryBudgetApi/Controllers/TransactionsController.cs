@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using EveryBudgetApi.ViewModels;
 using EveryBudgetApi.Models;
 using EveryBudgetCore.Models;
+using System.Globalization;
 
 namespace EveryBudgetApi.Controllers
 {
@@ -45,21 +46,22 @@ namespace EveryBudgetApi.Controllers
         [HttpPost]
         public object Upload([FromBody] List<UploadedTransaction> data)
         {
-            Console.WriteLine(data.ToString());
+            // Store each UploadTransaction in database
+            // Convert each UploadTransaction to Transaction
+            // Store transactions in database
 
-            //foreach( var item in data)
-            //{
-            //    // NOTE: https://stackoverflow.com/questions/2246694/how-can-i-connvert-a-json-object-to-a-custom-c-sharp-object
-            //    var myCustom = Newtonsoft.Json.JsonConvert.DeserializeObject<UploadedTransaction>(item.ToString());
-            //    Console.WriteLine(myCustom);
-            //}
+            var txns = new List<Transaction>();
 
             foreach(var d in data)
             {
-                Console.WriteLine(d);
+                var txn = new Transaction(vendor: d.Description, amount: d.Amount, transactionDate: d.EffectiveDate);
+                _context.Transactions.Add(txn);
             }
 
-            return new { data = "from /upload" };
+            _context.SaveChanges();
+
+            // TODO: Build a better success message to send back to client
+            return new { Message = "Upload successful!" };
         }
 
         [HttpPut("{id}")]

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace EveryBudgetCore.Models
 {
@@ -19,5 +20,20 @@ namespace EveryBudgetCore.Models
         [Column("vendor")] public string Vendor { get; set; }
         [Column("amount")] public decimal Amount { get; set; }
         [Column("transaction_date")] public DateTime TransactionDate { get; set; }
+
+        public Transaction() { }
+
+        public Transaction(string vendor, string amount, string transactionDate)
+        {
+            Id = Guid.NewGuid();
+            DateCreated = DateUtilities.DateTimeNowKindUtc();
+            DateUpdated = DateUtilities.DateTimeNowKindUtc();
+
+            // CategoryId
+
+            Vendor = vendor;
+            Amount = decimal.Parse(amount, CultureInfo.InvariantCulture);
+            TransactionDate = DateUtilities.MakeDateTimeKindUtc(DateTime.Parse(transactionDate));
+        }
     }
 }
