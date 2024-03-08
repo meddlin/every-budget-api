@@ -20,6 +20,12 @@ namespace EveryBudgetApi.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet]
+        public List<BudgetItem> Get()
+        {
+            return _context.BudgetItems.Select(x => x).ToList();
+        }
+
         [HttpPut]
         public string AddBudgetItem([FromBody] BudgetItem budgetItem)
         {

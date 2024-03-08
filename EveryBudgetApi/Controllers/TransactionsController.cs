@@ -37,10 +37,15 @@ namespace EveryBudgetApi.Controllers
             return new TransactionViewModel();
         }
 
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("{id}")]
+        public object Update([FromBody] Transaction txnData)
         {
+            Console.WriteLine(txnData.ToString());
 
+            _context.Transactions.Update(txnData);
+            _context.SaveChanges();
+
+            return new { Message = "Update successful!" };
         }
 
         [HttpPost]
