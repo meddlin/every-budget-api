@@ -55,6 +55,12 @@ namespace UtilityTester
             //    new EveryBudgetDbContext(), TransactionGenerator.Generate()
             //);
 
+            var b = BudgetActions.GenerateConnectedBudgetModels();
+            var _ctx = new EveryBudgetDbContext();
+            var res = _ctx.Budgets.Add(b);
+            _ctx.SaveChanges();
+            Console.WriteLine(res);
+
 
             // Shows querying Budgets -> Categories
             var data = new EveryBudgetDbContext().Budgets.Select(b => b)

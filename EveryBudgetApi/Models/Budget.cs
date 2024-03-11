@@ -20,7 +20,7 @@ namespace EveryBudgetApi.Models
 
         /* data fields */
         [Column("name")] public string Name { get; set; }
-        [Column("description")] public string Description { get; set; }
+        [Column("description")] public string? Description { get; set; }
 
         /* Relational fields */
         [NotMapped]

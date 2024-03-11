@@ -79,23 +79,70 @@ namespace UtilityTester
         }
 
 
-        public static void GenerateConnectedBudgetModels()
+        public static Budget GenerateConnectedBudgetModels()
         {
             Randomizer.Seed = new Random(8675309);
 
             var budgetGenerator = new Faker<Budget>()
-                .RuleFor(b => b.Id, f => f.Random.Guid())
-                .RuleFor(b => b.DateCreated, f => f.Date.Past())
-                .RuleFor(b => b.DateUpdated, f => f.Date.Recent())
+                .RuleFor(b => b.Id, f => Guid.NewGuid() )
+                .RuleFor(b => b.DateCreated, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Past()))
+                .RuleFor(b => b.DateUpdated, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Recent()))
                 .RuleFor(b => b.Name, f => f.Lorem.Word());
 
             var categoryGenerator = new Faker<EveryBudgetApi.Models.Category>()
-                .RuleFor(c => c.Id, f => f.Random.Guid())
-                .RuleFor(c => c.DateCreated, f => f.Date.Past())
-                .RuleFor(c => c.DateUpdated, f => f.Date.Recent())
+                .RuleFor(c => c.Id, f => Guid.NewGuid())
+                .RuleFor(c => c.DateCreated, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Past()))
+                .RuleFor(c => c.DateUpdated, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Recent()))
                 .RuleFor(c => c.Name, f => f.Lorem.Word());
 
+            var budgetItemGenerator = new Faker<BudgetItem>()
+                .RuleFor(bi => bi.Id, f => Guid.NewGuid())
+                .RuleFor(bi => bi.DateCreated, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Past()))
+                .RuleFor(bi => bi.DateUpdated, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Recent()))
+                // budgetId
+                // categoryId
+                .RuleFor(bi => bi.Name, f => f.Lorem.Word())
+                .RuleFor(bi => bi.Planned, f => f.Random.Decimal())
+                .RuleFor(bi => bi.Spent, f => f.Random.Decimal())
+                .RuleFor(bi => bi.Description, f => f.Lorem.Word());
+
+            var transactionGenerator = new Faker<Transaction>()
+                .RuleFor(t => t.Id, f => Guid.NewGuid())
+                .RuleFor(t => t.DateCreated, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Past()))
+                .RuleFor(t => t.DateUpdated, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Recent()))
+                // budgetId
+                // budgetItemId
+                .RuleFor(t => t.Vendor, f => f.Company.CompanyName())
+                .RuleFor(t => t.Amount, f => f.Random.Decimal())
+                .RuleFor(t => t.TransactionDate, f => DateUtilities.MakeDateTimeKindUtc(f.Date.Recent()))
+                .RuleFor(t => t.Notes, f => f.Lorem.Slug());
+
             Budget budget = budgetGenerator.Generate(1).Single();
+            List<Category> categories = categoryGenerator.Generate(5);
+            
+            foreach(var category in categories)
+            {
+                category.BudgetId = budget.Id;
+
+                List<BudgetItem> budgetItems = budgetItemGenerator.Generate(3);
+                foreach(var budgetItem in budgetItems)
+                {
+                    budgetItem.CategoryId = category.Id;
+                    List<Transaction> transactions = transactionGenerator.Generate(5);
+                    foreach(var txn in transactions)
+                    {
+                        txn.BudgetItemId = budgetItem.Id;
+                    }
+
+                    budgetItem.Transactions = transactions;
+                }
+
+                category.BudgetItems = budgetItems;
+            }
+            budget.Categories = categories;
+
+            Console.WriteLine(budget.Name);
+            return budget;
         }
 
         /*
