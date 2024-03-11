@@ -1,4 +1,4 @@
-using EveryBudgetCore.Models;
+using EveryBudgetApi.Models;
 
 namespace EveryBudgetApi.ViewModels;
 
@@ -6,6 +6,8 @@ public class BudgetViewModel
 {
     public Guid Id { get; set; }
     public DateTime DateUpdated { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
 
     public List<CategoryViewModel> Categories { get; set; }
 
@@ -13,6 +15,14 @@ public class BudgetViewModel
     /// Empty constructor
     /// </summary>
     public BudgetViewModel() { }
+
+    public BudgetViewModel(Budget budget)
+    {
+        Id = budget.Id;
+        DateUpdated = budget.DateUpdated;
+        Name = budget.Name;
+        Description = budget.Description;
+    }
 
     /// <summary>
     /// Constructor - to convert a collection of <c>Category</c> objects

@@ -1,5 +1,4 @@
 using EveryBudgetApi.Models;
-using EveryBudgetCore.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -1,11 +1,11 @@
 ﻿using Bogus;
-using EveryBudgetCore;
-using EveryBudgetCore.Models;
+using EveryBudgetApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EveryBudgetApi.Utilities;
 
 namespace UtilityTester
 {
@@ -15,13 +15,13 @@ namespace UtilityTester
         {
             Randomizer.Seed = new Random(8675309);
 
-            var categories = new Faker<EveryBudgetCore.Models.Category>()
+            var categories = new Faker<EveryBudgetApi.Models.Category>()
                 .RuleFor(c => c.Id, f => f.Random.Guid())
                 .RuleFor(c => c.DateCreated, f => f.Date.Past())
                 .RuleFor(c => c.DateUpdated, f => f.Date.Recent())
                 .RuleFor(c => c.Name, f => f.Lorem.Word());
 
-            List<EveryBudgetCore.Models.Category> test = categories.Generate(3);
+            List<EveryBudgetApi.Models.Category> test = categories.Generate(3);
             // Correct the DateTimeKind for categories
             foreach (var category in test)
             {
@@ -29,7 +29,7 @@ namespace UtilityTester
                 category.DateUpdated = DateUtilities.MakeDateTimeKindUtc(category.DateUpdated);
             }
 
-            var budgetItemGenerator = new Faker<EveryBudgetCore.Models.BudgetItem>()
+            var budgetItemGenerator = new Faker<EveryBudgetApi.Models.BudgetItem>()
                 .RuleFor(b => b.Id, f => f.Random.Guid())
                 .RuleFor(b => b.DateCreated, f => f.Date.Past())
                 .RuleFor(b => b.DateUpdated, f => f.Date.Recent())
@@ -37,7 +37,7 @@ namespace UtilityTester
                 .RuleFor(b => b.Name, f => f.Lorem.Word())
                 .RuleFor(b => b.Planned, f => f.Random.Decimal())
                 .RuleFor(b => b.Spent, f => f.Random.Decimal());
-            List<EveryBudgetCore.Models.BudgetItem> budgetItems = budgetItemGenerator.Generate(3);
+            List<EveryBudgetApi.Models.BudgetItem> budgetItems = budgetItemGenerator.Generate(3);
             budgetItems[0].CategoryId = test[0].Id;
             budgetItems[1].CategoryId = test[0].Id;
             budgetItems[2].CategoryId = test[0].Id;
@@ -76,6 +76,26 @@ namespace UtilityTester
                     Console.WriteLine($"  {transaction.Vendor}");
                 }
             }
+        }
+
+
+        public static void GenerateConnectedBudgetModels()
+        {
+            Randomizer.Seed = new Random(8675309);
+
+            var budgetGenerator = new Faker<Budget>()
+                .RuleFor(b => b.Id, f => f.Random.Guid())
+                .RuleFor(b => b.DateCreated, f => f.Date.Past())
+                .RuleFor(b => b.DateUpdated, f => f.Date.Recent())
+                .RuleFor(b => b.Name, f => f.Lorem.Word());
+
+            var categoryGenerator = new Faker<EveryBudgetApi.Models.Category>()
+                .RuleFor(c => c.Id, f => f.Random.Guid())
+                .RuleFor(c => c.DateCreated, f => f.Date.Past())
+                .RuleFor(c => c.DateUpdated, f => f.Date.Recent())
+                .RuleFor(c => c.Name, f => f.Lorem.Word());
+
+            Budget budget = budgetGenerator.Generate(1).Single();
         }
 
         /*

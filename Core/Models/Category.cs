@@ -10,6 +10,8 @@ namespace EveryBudgetCore.Models
         [Column("date_created")] public DateTime DateCreated { get; set; }
         [Column("date_updated")] public DateTime DateUpdated { get; set; }
 
+        [Column("budget_id")] public Guid BudgetId { get; set; }
+
         /* data fields */
         [Column("name")] public string Name { get; set; }
     }

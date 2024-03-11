@@ -1,4 +1,4 @@
-using EveryBudgetCore.Models;
+using EveryBudgetApi.Models;
 
 namespace EveryBudgetApi.ViewModels;
 

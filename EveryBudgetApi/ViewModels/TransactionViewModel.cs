@@ -1,4 +1,4 @@
-using EveryBudgetCore.Models;
+using EveryBudgetApi.Models;
 
 namespace EveryBudgetApi.ViewModels;
 
@@ -14,7 +14,7 @@ public class TransactionViewModel
     
     public TransactionViewModel() {}
 
-    public TransactionViewModel(EveryBudgetCore.Models.Transaction tran)
+    public TransactionViewModel(EveryBudgetApi.Models.Transaction tran)
     {
         Id = tran.Id;
         DateUpdated = tran.DateUpdated;

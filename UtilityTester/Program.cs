@@ -1,17 +1,33 @@
 ﻿using Bogus;
-using EveryBudgetCore.Models;
 using Microsoft.EntityFrameworkCore;
+using EveryBudgetApi.Models;
 
 namespace UtilityTester
 {
     public class EveryBudgetDbContext : DbContext
     {
-        public DbSet<EveryBudgetCore.Models.Category> Categories { get; set; }
-        public DbSet<EveryBudgetCore.Models.BudgetItem> BudgetItems { get; set; }
-        public DbSet<EveryBudgetCore.Models.Transaction> Transactions { get; set; }
+        public DbSet<EveryBudgetApi.Models.Budget> Budgets { get; set; }
+        public DbSet<EveryBudgetApi.Models.Category> Categories { get; set; }
+        public DbSet<EveryBudgetApi.Models.BudgetItem> BudgetItems { get; set; }
+        public DbSet<EveryBudgetApi.Models.Transaction> Transactions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Host=192.168.1.12;Database=every-budget;Username=testuser;Password=password1");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Budget>()
+                .HasMany(b => b.Categories)
+                .WithOne(e => e.Budget);
+
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.BudgetItems)
+                .WithOne(bi => bi.Category);
+
+            modelBuilder.Entity<BudgetItem>()
+                .HasMany(bi => bi.Transactions)
+                .WithOne(t => t.BudgetItem);
+        }
     }
 
     internal class Program
@@ -35,9 +51,33 @@ namespace UtilityTester
             //    BudgetActions.StoreCategories(db, categories);
             //}
 
-            BudgetActions.StoreTransactions(
-                new EveryBudgetDbContext(), TransactionGenerator.Generate()
-            );
+            //BudgetActions.StoreTransactions(
+            //    new EveryBudgetDbContext(), TransactionGenerator.Generate()
+            //);
+
+
+            // Shows querying Budgets -> Categories
+            var data = new EveryBudgetDbContext().Budgets.Select(b => b)
+                .Include(b => b.Categories).ToList();
+
+            // Shows querying Categories -> BudgetItems
+            var data2 = new EveryBudgetDbContext().Categories.Select(c => c)
+                .Include(c => c.BudgetItems).ToList();
+
+            var data3 = new EveryBudgetDbContext().BudgetItems.Select(bi => bi)
+                .Include(bi => bi.Transactions).ToList();
+
+            // Shows able to query Categories without data relationships
+            var categories = new EveryBudgetDbContext().Categories.Select(c => c).ToList();
+
+            var all = new EveryBudgetDbContext().Budgets
+                .Select(b => b)
+                .Include(b => b.Categories)
+                .ThenInclude(c => c.BudgetItems)
+                .ThenInclude(bi => bi.Transactions)
+                .ToList();
+
+            Console.WriteLine(data);
 
 
             Console.WriteLine("done inserting...");
