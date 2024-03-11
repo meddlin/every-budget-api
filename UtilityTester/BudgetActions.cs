@@ -81,7 +81,7 @@ namespace UtilityTester
 
         public static Budget GenerateConnectedBudgetModels()
         {
-            Randomizer.Seed = new Random(8675309);
+            // Randomizer.Seed = new Random(8675309);
 
             var budgetGenerator = new Faker<Budget>()
                 .RuleFor(b => b.Id, f => Guid.NewGuid() )
