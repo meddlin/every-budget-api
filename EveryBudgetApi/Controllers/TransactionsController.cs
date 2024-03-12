@@ -22,7 +22,7 @@ namespace EveryBudgetApi.Controllers
         [HttpGet]
         public IEnumerable<TransactionViewModel> Get()
         {
-            List<EveryBudgetApi.Models.Transaction> data = _context.Transactions.Select(t => t).ToList();
+           List<EveryBudgetApi.Models.Transaction> data = _context.Transactions.Select(t => t).ToList();
             var tranList = new List<TransactionViewModel>();
 
             data.ForEach(transaction => tranList.Add(new TransactionViewModel(transaction)));
