@@ -20,10 +20,10 @@ namespace EveryBudgetApi.Models
         [Column("budget_item_id")] public Guid? BudgetItemId { get; set; }
 
         /* data fields */
-        [Column("vendor")] public string Vendor { get; set; }
-        [Column("amount")] public decimal Amount { get; set; }
-        [Column("transaction_date")] public DateTime TransactionDate { get; set; }
-        [Column("notes")] public string Notes { get; set; }
+        [Column("vendor")] public string? Vendor { get; set; }
+        [Column("amount")] public decimal? Amount { get; set; }
+        [Column("transaction_date")] public DateTime? TransactionDate { get; set; }
+        [Column("notes")] public string? Notes { get; set; }
 
         [NotMapped]
         public BudgetItem BudgetItem { get; set; }

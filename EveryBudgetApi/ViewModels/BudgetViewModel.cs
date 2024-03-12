@@ -22,6 +22,12 @@ public class BudgetViewModel
         DateUpdated = budget.DateUpdated;
         Name = budget.Name;
         Description = budget.Description;
+
+        Categories = new List<CategoryViewModel>();
+        foreach (var item in budget.Categories)
+        {
+            Categories.Add(new CategoryViewModel(item));   
+        }
     }
 
     /// <summary>

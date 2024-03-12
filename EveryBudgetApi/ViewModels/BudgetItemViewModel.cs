@@ -32,7 +32,12 @@ namespace EveryBudgetApi.ViewModels
             Name = budgetItem.Name;
             Planned = budgetItem.Planned;
             Spent = budgetItem.Spent;
+
             Transactions = new List<TransactionViewModel>();
+            foreach(var item in budgetItem.Transactions)
+            {
+                Transactions.Add(new TransactionViewModel(item));
+            }
         }
     }
 }
