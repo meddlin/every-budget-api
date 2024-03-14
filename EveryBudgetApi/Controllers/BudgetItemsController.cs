@@ -1,5 +1,4 @@
 using EveryBudgetApi.Models;
-using EveryBudgetCore.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +17,12 @@ namespace EveryBudgetApi.Controllers
         {
             _context = context;
             _configuration = configuration;
+        }
+
+        [HttpGet]
+        public List<BudgetItem> Get()
+        {
+            return _context.BudgetItems.Select(x => x).ToList();
         }
 
         [HttpPut]

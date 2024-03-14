@@ -2,7 +2,7 @@
 using EveryBudgetApi.ViewModels;
 using Microsoft.AspNetCore.Cors;
 using EveryBudgetApi.Models;
-using EveryBudgetCore.Models;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,83 +22,42 @@ namespace EveryBudgetApi.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Get most recent <c>Budget</c>
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public string Test()
+        public ViewModels.BudgetViewModel Get()
         {
-            var test = _context.Categories.ToList();
+            // TODO: Ensure this is actually the most recent. For now, we've cheated the
+            //          data to just select one at random. The easiest implementation
+            //          might be to set a flag in the database for "most recent".
+            Budget budget = _context.Budgets
+                                .Select(b => b)
+                                .Include(b => b.Categories)
+                                    .ThenInclude(c => c.BudgetItems)
+                                    .ThenInclude(bi => bi.Transactions)
+                                .FirstOrDefault();
 
-            return $@"# of Categories: {test.Count()}";
+            return new ViewModels.BudgetViewModel(budget);
         }
 
-        // GET: api/values
-        [HttpGet]
-        public BudgetViewModel Get()
-        {
-            var x = new BudgetViewModel() {
-                Id = Guid.NewGuid(),
-                DateUpdated = DateTime.Now,
-                Categories = new List<CategoryViewModel>()
-                {
-                    new CategoryViewModel() { Id = Guid.NewGuid(), DateUpdated = DateTime.Now },
-                    new CategoryViewModel() { 
-                        Id = Guid.NewGuid(), 
-                        DateUpdated = DateTime.Now, 
-                        BudgetItems = new List<BudgetItemViewModel>()
-                        {
-                            new BudgetItemViewModel() { 
-                                Id = Guid.NewGuid(), 
-                                DateUpdated = DateTime.Now,
-                                Name = "Groceries",
-                                Planned = 400.00M,
-                                Spent = 75.00M,
-                                Transactions = new List<TransactionViewModel>()
-                                {
-                                    new TransactionViewModel() { 
-                                        Id = Guid.NewGuid(), 
-                                        DateUpdated = DateTime.Now, 
-                                        Vendor = "ACME Co.", 
-                                        Amount = 35.00M, 
-                                        TransactionDate = DateTime.Now 
-                                    },
-                                    new TransactionViewModel() { 
-                                        Id = Guid.NewGuid(), 
-                                        DateUpdated = DateTime.Now, 
-                                        Vendor = "HEB", 
-                                        Amount = 25.00M, 
-                                        TransactionDate = DateTime.Now 
-                                    },
-                                    new TransactionViewModel() { 
-                                        Id = Guid.NewGuid(), 
-                                        DateUpdated = DateTime.Now, 
-                                        Vendor = "Walmart", 
-                                        Amount = 15.00M, 
-                                        TransactionDate = DateTime.Now 
-                                    },
-                                }
-                            },
-                        }
-                    },
-                }
-            };
-
-            // NEW ATTEMPT
-            List<CategoryViewModel> categoryVM = new List<CategoryViewModel>();
-
-            List<Category> categoriesData = _context.Categories.ToList();
-            foreach(Category category in categoriesData)
-            {
-                List<BudgetItem> biList = _context.BudgetItems.Where(bi => category.Id == bi.CategoryId).ToList();
-                categoryVM.Add(new CategoryViewModel(category, biList));
-            }
-
-            return new BudgetViewModel(categoryVM);
-        }
-
-        // GET api/values/5
+        /// <summary>
+        /// Get a specific <c>Budget</c> by <c>Id</c>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
-        public BudgetViewModel Get(int id)
+        public ViewModels.BudgetViewModel Get(Guid id)
         {
-            return new BudgetViewModel();
+            Budget budget = _context.Budgets
+                .Select(b => b).Where(b => b.Id == id)
+                    .Include(b => b.Categories)
+                        .ThenInclude(c => c.BudgetItems)
+                        .ThenInclude(bi => bi.Transactions)
+                .FirstOrDefault();
+
+            return new ViewModels.BudgetViewModel(budget);
         }
 
         // POST api/values

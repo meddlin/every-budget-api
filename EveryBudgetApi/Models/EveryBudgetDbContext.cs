@@ -1,3 +1,4 @@
+using EveryBudgetApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.Intrinsics.Arm;
 
@@ -16,7 +17,23 @@ public class EveryBudgetDbContext : DbContext
         options.UseNpgsql(Configuration.GetConnectionString("LocalDatabase"));
     }
 
-    public DbSet<EveryBudgetCore.Models.Category> Categories { get; set; }
-    public DbSet<EveryBudgetCore.Models.BudgetItem> BudgetItems { get; set; }
-    public DbSet<EveryBudgetCore.Models.Transaction> Transactions { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Budget>()
+            .HasMany(b => b.Categories)
+            .WithOne(e => e.Budget);
+
+        modelBuilder.Entity<Category>()
+            .HasMany(c => c.BudgetItems)
+            .WithOne(bi => bi.Category);
+
+        modelBuilder.Entity<BudgetItem>()
+            .HasMany(bi => bi.Transactions)
+            .WithOne(t => t.BudgetItem);
+    }
+
+    public DbSet<EveryBudgetApi.Models.Budget> Budgets { get; set; }
+    public DbSet<EveryBudgetApi.Models.Category> Categories { get; set; }
+    public DbSet<EveryBudgetApi.Models.BudgetItem> BudgetItems { get; set; }
+    public DbSet<EveryBudgetApi.Models.Transaction> Transactions { get; set; }
 }

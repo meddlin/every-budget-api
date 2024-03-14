@@ -1,4 +1,4 @@
-using EveryBudgetCore.Models;
+using EveryBudgetApi.Models;
 
 namespace EveryBudgetApi.ViewModels;
 
@@ -17,6 +17,12 @@ public class CategoryViewModel
         Id = category.Id;
         DateUpdated = category.DateUpdated;
         Name = category.Name;
+
+        BudgetItems = new List<BudgetItemViewModel>();
+        foreach(var item in category.BudgetItems)
+        {
+            BudgetItems.Add(new BudgetItemViewModel(item));
+        }
     }
 
     public CategoryViewModel(Category category, IEnumerable<BudgetItem> budgetItems)

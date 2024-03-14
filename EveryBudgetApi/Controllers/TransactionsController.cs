@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using EveryBudgetApi.ViewModels;
 using EveryBudgetApi.Models;
-using EveryBudgetCore.Models;
 using System.Globalization;
 
 namespace EveryBudgetApi.Controllers
@@ -23,7 +22,7 @@ namespace EveryBudgetApi.Controllers
         [HttpGet]
         public IEnumerable<TransactionViewModel> Get()
         {
-            List<EveryBudgetCore.Models.Transaction> data = _context.Transactions.Select(t => t).ToList();
+           List<EveryBudgetApi.Models.Transaction> data = _context.Transactions.Select(t => t).ToList();
             var tranList = new List<TransactionViewModel>();
 
             data.ForEach(transaction => tranList.Add(new TransactionViewModel(transaction)));
@@ -37,10 +36,15 @@ namespace EveryBudgetApi.Controllers
             return new TransactionViewModel();
         }
 
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("{id}")]
+        public object Update([FromBody] Transaction txnData)
         {
+            Console.WriteLine(txnData.ToString());
 
+            _context.Transactions.Update(txnData);
+            _context.SaveChanges();
+
+            return new { Message = "Update successful!" };
         }
 
         [HttpPost]

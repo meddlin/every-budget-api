@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using JsonConverter = Newtonsoft.Json.JsonConverter;
 
-namespace EveryBudgetCore.Models
+namespace EveryBudgetApi.Models
 {
     public class UploadedTransaction
     {
