@@ -1,4 +1,6 @@
 using EveryBudgetApi.Models;
+using EveryBudgetApi.Utilities;
+using EveryBudgetApi.ViewModels;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +37,17 @@ namespace EveryBudgetApi.Controllers
         }
 
         [HttpPost]
-        public string UpdateCategory([FromBody] Category category)
+        public string UpdateCategory([FromBody] CategoryViewModel vm)
         {
-            _context.Update(category);
+            Category? data = _context.Categories.Select(c => c).Where(c => c.Id == vm.Id).FirstOrDefault();
+            data.DateUpdated = DateUtilities.DateTimeNowKindUtc();
+
+            data.Name = vm.Name;
+
+            // TODO: Write logic to convert BudgetItem to BudgetItemViewModel
+            // data.BudgetItems = vm.BudgetItems;
+
+            _context.Update(data);
             _context.SaveChanges();
 
             return "Category Updated";

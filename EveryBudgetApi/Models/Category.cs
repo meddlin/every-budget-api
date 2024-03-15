@@ -1,3 +1,4 @@
+using EveryBudgetApi.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,5 +27,14 @@ namespace EveryBudgetApi.Models
         public Budget Budget { get; set; }
         [NotMapped]
         public ICollection<BudgetItem> BudgetItems { get; set; }
+
+        public Category() { }
+
+        public Category(CategoryViewModel vm)
+        {
+            Id = vm.Id;
+            Name = vm.Name;
+
+        }
     }
 }
