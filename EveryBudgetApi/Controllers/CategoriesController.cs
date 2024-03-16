@@ -37,7 +37,7 @@ namespace EveryBudgetApi.Controllers
         }
 
         [HttpPost]
-        public string UpdateCategory([FromBody] CategoryViewModel vm)
+        public object UpdateCategory([FromBody] CategoryViewModel vm)
         {
             Category? data = _context.Categories.Select(c => c).Where(c => c.Id == vm.Id).FirstOrDefault();
             data.DateUpdated = DateUtilities.DateTimeNowKindUtc();
@@ -50,7 +50,7 @@ namespace EveryBudgetApi.Controllers
             _context.Update(data);
             _context.SaveChanges();
 
-            return "Category Updated";
+            return new { Message = "Category Update successful!" };
         }
     }
 }
