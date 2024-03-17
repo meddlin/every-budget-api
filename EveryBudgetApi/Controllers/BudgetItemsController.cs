@@ -1,4 +1,6 @@
 using EveryBudgetApi.Models;
+using EveryBudgetApi.Utilities;
+using EveryBudgetApi.ViewModels;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,12 +37,20 @@ namespace EveryBudgetApi.Controllers
         }
 
         [HttpPost]
-        public string UpdateBudgetItem([FromBody] BudgetItem budgetItem)
+        public object UpdateBudgetItem([FromBody] BudgetItemViewModel vm)
         {
-            _context.Update(budgetItem);
+            BudgetItem? data = _context.BudgetItems.Select(bi => bi).Where(bi => bi.Id == vm.Id).FirstOrDefault();
+            data.DateUpdated = DateUtilities.DateTimeNowKindUtc();
+
+            // User-controlled fields to update
+            data.Name = vm.Name;
+            data.Planned = vm.Planned;
+            data.Spent = vm.Spent;
+
+            _context.Update(data);
             _context.SaveChanges();
 
-            return "Budget Item Updated";
+            return new { Message = "BudgetItem Update successful!" };
         }
     }
 }
