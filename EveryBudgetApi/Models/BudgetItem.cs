@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EveryBudgetApi.Models
@@ -8,7 +9,10 @@ namespace EveryBudgetApi.Models
     public class BudgetItem
     {
         /* meta-fields, for DB metrics */
-        [Column("id")] public Guid Id { get; set; }
+        [Key]
+        [Required]
+        [Column("id")] 
+        public Guid Id { get; set; }
         [Column("date_created")] public DateTime DateCreated { get; set; }
         [Column("date_updated")] public DateTime DateUpdated { get; set; }
 

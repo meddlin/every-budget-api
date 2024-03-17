@@ -1,19 +1,23 @@
 ﻿using EveryBudgetApi.Models;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace EveryBudgetApi.ViewModels
 {
     public class BudgetItemViewModel
     {
+        [Required]
         public Guid Id { get; set; }
-        public DateTime DateCreated { get; set; }
         public DateTime DateUpdated { get; set; }
 
+        [Required]
         public string Name { get; set; }
+        [Required]
         public decimal Planned { get; set; }
+        [Required]
         public decimal Spent { get; set; }
 
-        public List<TransactionViewModel> Transactions { get; set; }
+        public List<TransactionViewModel>? Transactions { get; set; }
 
         /// <summary>
         /// Empty constructor
@@ -27,8 +31,8 @@ namespace EveryBudgetApi.ViewModels
         public BudgetItemViewModel(BudgetItem budgetItem)
         {
             Id = budgetItem.Id;
-            DateCreated = budgetItem.DateCreated;
             DateUpdated = budgetItem.DateUpdated;
+
             Name = budgetItem.Name;
             Planned = budgetItem.Planned;
             Spent = budgetItem.Spent;
