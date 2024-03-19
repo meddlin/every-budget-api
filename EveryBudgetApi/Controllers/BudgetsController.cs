@@ -3,6 +3,7 @@ using EveryBudgetApi.ViewModels;
 using Microsoft.AspNetCore.Cors;
 using EveryBudgetApi.Models;
 using Microsoft.EntityFrameworkCore;
+using EveryBudgetApi.Utilities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -58,6 +59,21 @@ namespace EveryBudgetApi.Controllers
                 .FirstOrDefault();
 
             return new ViewModels.BudgetViewModel(budget);
+        }
+
+        [HttpPost]
+        public object UpdateBudget([FromBody] BudgetViewModel vm)
+        {
+            Budget? data = _context.Budgets.Select(b => b).Where(b => b.Id == vm.Id).FirstOrDefault();
+            data.DateUpdated = DateUtilities.DateTimeNowKindUtc();
+
+            data.Name = vm.Name;
+            // TODO : Update Budget.description too
+
+            _context.Update(data);
+            _context.SaveChanges();
+
+            return new { Message = "Budget Update successful!" };
         }
 
         // POST api/values
