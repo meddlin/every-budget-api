@@ -1,15 +1,21 @@
 using EveryBudgetApi.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace EveryBudgetApi.ViewModels;
 
 public class BudgetViewModel
 {
+    [Required]
     public Guid Id { get; set; }
-    public DateTime DateUpdated { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
 
-    public List<CategoryViewModel> Categories { get; set; }
+    public DateTime DateUpdated { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string? Description { get; set; }
+
+    public List<CategoryViewModel>? Categories { get; set; }
 
     /// <summary>
     /// Empty constructor
