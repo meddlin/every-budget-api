@@ -12,7 +12,7 @@ namespace UtilityTester
         public DbSet<EveryBudgetApi.Models.Transaction> Transactions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=192.168.1.12;Database=every-budget;Username=testuser;Password=password1");
+            => optionsBuilder.UseNpgsql("Host=localhost;Database=every-budget;Username=user-name;Password=strong-password");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
