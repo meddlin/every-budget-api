@@ -44,6 +44,107 @@ This `launch.json` allows VSCode to have easy debugging straight from the editor
 }
 ```
 
+### Docker Setup (tested on MacOS)
+
+1. The `docker-compose.yml` file will stand up a Postgres DB and pgAdmin instance.
+
+- Start -> `docker compose up -d`
+- Stop -> `docker compose down`
+
+For any config changes to Postgres, it's best to remove the volume so Postgres can re-run
+it's first time initialization. Left over volumes will prevent this from happening (see
+docs below).
+
+- Find volumes -> `docker volume ls`
+- Remove volume -> `docker volume rm [vol-name]`
+
+2. Setup connection string(s)
+
+Pull username, password, and database name from the `docker-compose.yml` file, 
+and create a connection string.
+
+```bash
+"Host=localhost;Database=every-budget;Username=user-name;Password=strong-password"
+```
+
+This will need to be set in both `EveryBudgetApi` and `UtilityTester` projects.
+
+3. Initial Data Seed - Setup `UtilityTester` and run
+
+Running this project via debugger is recommended. It should run fine normally, but if you 
+run into any issues, it's better to already be in the debugger.
+
+This will ensure the database is reachable via code, and will generate fake data for testing. Somewhere
+between the EntityFramework code and Bogus library, this also creates the DB tables, too.
+
+4. Start WebAPI from VSCode debugger
+
+After startup, the WebAPI Swagger doc will be available at either of the following. Check
+`EveryBudgetApi/Properties/launchSettings.json` for this.
+
+- `http://localhost:[port]/swagger`
+- `https://localhost:[port]/swagger`
+
+Ref: https://stackoverflow.com/questions/65811120/what-is-the-default-swagger-ui-url-in-swashbuckle
+
+(Optional): Setup VSCode debugger (`.vscode/launch.json`)
+
+- Open VSCode debug section (in sidebar)
+- Dropdown > Add configuration
+
+**Problem 1**
+
+> This problem occurred on MacOS, not sure if applicable to Linux.
+
+If you previously had Postgres installed, you may get an error about port 5432 already being bound. I solved that by stopping the locally installed Postgres service. 
+
+```bash
+brew services stop postgresql
+```
+
+Ref: https://stackoverflow.com/questions/34173451/stop-postgresql-service-on-mac-via-terminal
+
+For some reason the postgres service was "sticky" about not letting go of that port 5432 binding. So, I still manually searched for any service holding 5432, and `pkill`'d it.
+
+```bash
+$ sudo lsof -i :5432
+$ sudo pkill -u postgres
+```
+
+Ref: https://stackoverflow.com/questions/54085216/port-5432-is-already-in-use-postgres-mac
+
+For good measure, I restarted after this and everything seemed to continue working as expected. I thought it might be necessary to force (local) Postgres to not startup on boot, but that hasn't been necessary.
+
+- https://dba.stackexchange.com/questions/276416/disable-auto-start-of-postgres-server-on-boot-mac
+
+**Problem 2**
+
+Setting a `POSTGRES_DB` value will create a database upon starting the 
+`docker compose up -d`, but an old data volume hanging around (from previous iterations) could prevent this from happening.
+
+Ref: https://stackoverflow.com/questions/56657683/postgres-docker-image-is-not-creating-database-with-custom-name
+
+Explanation -> Ref: https://github.com/docker-library/postgres/issues/453#issuecomment-393939412
+
+Finally, specifying local directories for volumes is a little special:
+
+Ref: https://stackoverflow.com/questions/48091744/error-volumes-dbdata-must-be-a-mapping-or-null
+
+**Problem 3**
+
+> This turned out to be a non-issue. You can access the containers, from the host, via `localhost`.
+
+Get the IP of the container from the host.
+
+```bash
+docker inspect \
+  -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 'container-id'
+```
+
+Ref: https://stackoverflow.com/questions/17157721/how-to-get-a-docker-containers-ip-address-from-the-host
+
+
+
 ## Development Environment Notes
 
 This project's development was started on MacOS + VSCode. Visual Studio for Mac is being deprecated (related in a moment) thus, VSCode with the C# Dev Kit package are bring provided as a "replacement" for doing native development on Mac. You'll also want to install the `dotnet-aspnet-codegenerator` package.
