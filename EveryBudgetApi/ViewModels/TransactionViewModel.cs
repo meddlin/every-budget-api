@@ -12,6 +12,8 @@ public class TransactionViewModel
     public DateTime TransactionDate { get; set; }
     public string Notes { get; set; }
 
+    public Guid? BudgetItemId { get; set; }
+
     
     public TransactionViewModel() {}
 
