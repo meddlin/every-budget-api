@@ -11,8 +11,9 @@ namespace UtilityTester
         public DbSet<EveryBudgetApi.Models.BudgetItem> BudgetItems { get; set; }
         public DbSet<EveryBudgetApi.Models.Transaction> Transactions { get; set; }
 
+        // TODO: Test if `localhost' or 'localhost:5432' works when the DB is running in Docker
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=localhost;Database=every-budget;Username=user-name;Password=strong-password");
+            => optionsBuilder.UseNpgsql("Host=localhost:5432;Database=every-budget;Username=meddlin;Password=jailbreak");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
