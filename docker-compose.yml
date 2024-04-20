@@ -23,7 +23,25 @@ services:
       PGADMIN_DEFAULT_PASSWORD: strong-password
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3030:3000"
+    environment:
+      - GF_DATABASE_TYPE=postgres
+      - GF_DATABASE_HOST=db
+      - GF_DATABASE_PORT=5432
+      - GF_DATABASE_NAME=every-budget
+      - GF_DATABASE_USER=user-name
+      - GF_DATABASE_PASSWORD=strong-password
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    depends_on:
+      - db
 
 volumes:
   local_pgdata: 
   pgadmin-data:
+  grafana-storage:
