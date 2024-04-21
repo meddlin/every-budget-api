@@ -23,6 +23,10 @@ public class EveryBudgetDbContext : DbContext
             .HasMany(b => b.Categories)
             .WithOne(e => e.Budget);
 
+        modelBuilder.Entity<Budget>()
+            .HasMany(b => b.UploadedTransactions)
+            .WithOne(e => e.Budget);
+
         modelBuilder.Entity<Category>()
             .HasMany(c => c.BudgetItems)
             .WithOne(bi => bi.Category);
@@ -36,4 +40,5 @@ public class EveryBudgetDbContext : DbContext
     public DbSet<EveryBudgetApi.Models.Category> Categories { get; set; }
     public DbSet<EveryBudgetApi.Models.BudgetItem> BudgetItems { get; set; }
     public DbSet<EveryBudgetApi.Models.Transaction> Transactions { get; set; }
+    public DbSet<EveryBudgetApi.Models.UploadedTransaction> UploadedTransactions { get; set; }
 }
