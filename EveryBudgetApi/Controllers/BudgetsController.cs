@@ -35,6 +35,7 @@ namespace EveryBudgetApi.Controllers
             //          might be to set a flag in the database for "most recent".
             Budget budget = _context.Budgets
                                 .Select(b => b)
+                                .Include(b => b.UploadedTransactions)
                                 .Include(b => b.Categories)
                                     .ThenInclude(c => c.BudgetItems)
                                     .ThenInclude(bi => bi.Transactions)

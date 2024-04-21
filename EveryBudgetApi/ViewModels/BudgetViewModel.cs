@@ -16,6 +16,7 @@ public class BudgetViewModel
     public string? Description { get; set; }
 
     public List<CategoryViewModel>? Categories { get; set; }
+    public List<UploadedTransactionViewModel>? UploadedTransactions { get; set; }
 
     /// <summary>
     /// Empty constructor
@@ -30,9 +31,14 @@ public class BudgetViewModel
         Description = budget.Description;
 
         Categories = new List<CategoryViewModel>();
+        UploadedTransactions = new List<UploadedTransactionViewModel>();
         foreach (var item in budget.Categories)
         {
             Categories.Add(new CategoryViewModel(item));   
+        }
+        foreach(var item in budget.UploadedTransactions)
+        {
+            UploadedTransactions.Add(new UploadedTransactionViewModel(item));
         }
     }
 

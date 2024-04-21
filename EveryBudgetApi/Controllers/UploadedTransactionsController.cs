@@ -1,4 +1,5 @@
 ﻿using EveryBudgetApi.Models;
+using EveryBudgetApi.ViewModels;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
