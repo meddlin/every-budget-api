@@ -1,4 +1,5 @@
 ﻿using EveryBudgetApi.Utilities;
+using EveryBudgetApi.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
