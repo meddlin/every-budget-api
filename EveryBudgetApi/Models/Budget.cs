@@ -25,12 +25,15 @@ namespace EveryBudgetApi.Models
         /* Relational fields */
         [NotMapped]
         public ICollection<Category> Categories { get; set;  } = new List<Category>();
+        [NotMapped]
+        public ICollection<UploadedTransaction> UploadedTransactions { get; set; } = new List<UploadedTransaction>();
 
         public void QueryFullBudget(EveryBudgetDbContext db, string budgetName)
         {
             var fullBudget = db.Budgets
                 .Select(b => b)
                 .Where(b => b.Name == budgetName)
+                .Include(b => b.UploadedTransactions)
                 .Include(b => b.Categories)
                 .ThenInclude(c => c.BudgetItems)
                 .ThenInclude(bi => bi.Transactions)
