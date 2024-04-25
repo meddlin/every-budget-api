@@ -58,6 +58,8 @@ namespace EveryBudgetApi.Controllers
             Transaction trn = _context.Transactions.Select(t => t).Where(t => t.Id == vm.Id).FirstOrDefault();
             BudgetItem bi = _context.BudgetItems.Select(bi => bi).Where(bi => bi.Id == vm.BudgetItemId).FirstOrDefault();
 
+            // TODO: Validate Transaction and BudgetItem are set to instances of real data/objects before continuing.
+
             // Change amount left to spend for BudgetItem
             bi.Spent = bi.Spent + trn.Amount.Value;
             bi.DateUpdated = DateUtilities.DateTimeNowKindUtc();
@@ -101,9 +103,13 @@ namespace EveryBudgetApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public object Delete(Guid id)
         {
+            var tran = _context.Transactions.FirstOrDefault(x => x.Id == id);
+            _context.Transactions.Remove(tran);
+            _context.SaveChanges();
 
+            return new { Message = "Transaction deleted." };
         }
     }
 }

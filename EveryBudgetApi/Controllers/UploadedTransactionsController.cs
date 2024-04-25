@@ -25,7 +25,7 @@ namespace EveryBudgetApi.Controllers
         {
             var tranList = new List<UploadedTransaction>();
 
-            foreach(var d in data)
+            foreach (var d in data)
             {
                 var txn = new UploadedTransaction(d);
                 _context.UploadedTransactions.Add(txn);
@@ -34,6 +34,16 @@ namespace EveryBudgetApi.Controllers
 
             // TODO: Build a better success message to send back to client
             return new { Message = "Upload successful!" };
+        }
+
+        [HttpDelete("{id}")]
+        public object Delete(Guid id)
+        {
+            var uplTran = _context.UploadedTransactions.FirstOrDefault(x => x.Id == id);
+            _context.UploadedTransactions.Remove(uplTran);
+            _context.SaveChanges();
+
+            return new { Message = "Transaction deleted." };
         }
     }
 }
