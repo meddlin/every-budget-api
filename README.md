@@ -1,5 +1,14 @@
 # Every Budget API
 
+> NOTE
+> Most recent local run on MacOS required rebuilding local environment and data. Tear
+> down all containers, volumes, and check for local postgres running on MacOS. If those
+> processes exist, kill them. Then stand up containers, let volumes be rebuilt, and 
+> re-run UtilityTester for data seeding.
+
+## Run with `dotnet`
+
+$> `dotnet run --project ./EveryBudgetApi/EveryBudgetApi.csproj`
 
 ## Launch & Debug
 
@@ -70,6 +79,10 @@ and create a connection string.
 This will need to be set in both `EveryBudgetApi` and `UtilityTester` projects.
 
 3. Initial Data Seed - Setup `UtilityTester` and run
+
+```
+dotnet run --project ./UtilityTester/UtilityTester.csproj
+```
 
 Running this project via debugger is recommended. It should run fine normally, but if you 
 run into any issues, it's better to already be in the debugger.
