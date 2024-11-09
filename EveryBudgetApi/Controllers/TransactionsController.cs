@@ -75,27 +75,6 @@ namespace EveryBudgetApi.Controllers
             return new { Message = "Success: Transaction related to BudgetItem" };
         }
 
-        //[HttpPost]
-        //public object Upload([FromBody] List<UploadedTransaction> data)
-        //{
-        //    // Store each UploadTransaction in database
-        //    // Convert each UploadTransaction to Transaction
-        //    // Store transactions in database
-
-        //    var txns = new List<Transaction>();
-
-        //    foreach(var d in data)
-        //    {
-        //        var txn = new Transaction(vendor: d.Description, amount: d.Amount, transactionDate: d.EffectiveDate);
-        //        _context.Transactions.Add(txn);
-        //    }
-
-        //    _context.SaveChanges();
-
-        //    // TODO: Build a better success message to send back to client
-        //    return new { Message = "Upload successful!" };
-        //}
-
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
