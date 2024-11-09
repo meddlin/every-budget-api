@@ -58,6 +58,8 @@ namespace EveryBudgetApi.Controllers
             Transaction trn = _context.Transactions.Select(t => t).Where(t => t.Id == vm.Id).FirstOrDefault();
             BudgetItem bi = _context.BudgetItems.Select(bi => bi).Where(bi => bi.Id == vm.BudgetItemId).FirstOrDefault();
 
+            // TODO: Validate Transaction and BudgetItem are set to instances of real data/objects before continuing.
+
             // Change amount left to spend for BudgetItem
             bi.Spent = bi.Spent + trn.Amount.Value;
             bi.DateUpdated = DateUtilities.DateTimeNowKindUtc();
@@ -73,27 +75,6 @@ namespace EveryBudgetApi.Controllers
             return new { Message = "Success: Transaction related to BudgetItem" };
         }
 
-        //[HttpPost]
-        //public object Upload([FromBody] List<UploadedTransaction> data)
-        //{
-        //    // Store each UploadTransaction in database
-        //    // Convert each UploadTransaction to Transaction
-        //    // Store transactions in database
-
-        //    var txns = new List<Transaction>();
-
-        //    foreach(var d in data)
-        //    {
-        //        var txn = new Transaction(vendor: d.Description, amount: d.Amount, transactionDate: d.EffectiveDate);
-        //        _context.Transactions.Add(txn);
-        //    }
-
-        //    _context.SaveChanges();
-
-        //    // TODO: Build a better success message to send back to client
-        //    return new { Message = "Upload successful!" };
-        //}
-
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
@@ -101,9 +82,13 @@ namespace EveryBudgetApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public object Delete(Guid id)
         {
+            var tran = _context.Transactions.FirstOrDefault(x => x.Id == id);
+            _context.Transactions.Remove(tran);
+            _context.SaveChanges();
 
+            return new { Message = "Transaction deleted." };
         }
     }
 }

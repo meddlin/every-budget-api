@@ -5,6 +5,7 @@ namespace EveryBudgetApi.ViewModels
 {
     public class UploadedTransactionViewModel
     {
+        public Guid Id { get; set; }
         public string Amount { get; set; }
         public string Balance { get; set; }
         public string CheckNumber { get; set; }
@@ -23,6 +24,7 @@ namespace EveryBudgetApi.ViewModels
 
         public UploadedTransactionViewModel(UploadedTransaction uplTran) 
         {
+            this.Id = uplTran.Id;
             this.Amount = uplTran.Amount;
             this.Balance = uplTran.Balance;
             this.CheckNumber = uplTran.CheckNumber;
