@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace EveryBudgetApi.Models
 {
@@ -16,8 +17,11 @@ namespace EveryBudgetApi.Models
         [Column("date_updated")] public DateTime DateUpdated { get; set; }
 
         /* keys & relation fields */
-        [Column("budget_id")] public Guid? BudgetId { get; set; }
-        [Column("budget_item_id")] public Guid? BudgetItemId { get; set; }
+        [Column("budget_id")]
+        public Guid? BudgetId { get; set; }
+
+        [Column("budget_item_id")] 
+        public Guid? BudgetItemId { get; set; }
 
         /* data fields */
         [Column("vendor")] public string? Vendor { get; set; }

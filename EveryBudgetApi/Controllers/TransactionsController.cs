@@ -40,12 +40,14 @@ namespace EveryBudgetApi.Controllers
         }
 
         [HttpPost("{id}")]
-        public object Update([FromBody] Transaction txnData)
+        public object Update([FromBody] TransactionViewModel txnData)
         {
             Console.WriteLine(txnData.ToString());
 
-            _context.Transactions.Update(txnData);
-            _context.SaveChanges();
+            //_context.Transactions.Select()
+
+            //_context.Transactions.Update(txnData);
+            //_context.SaveChanges();
 
             return new { Message = "Update successful!" };
         }
