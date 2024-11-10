@@ -16,7 +16,6 @@ namespace EveryBudgetApi.ViewModels
         public string PostingDate { get; set; }
         public string ReferenceNumber { get; set; }
         public string TransactionCategory { get; set; }
-        public string TransactionID { get; set; }
         public string TransactionType { get; set; }
         public string Type { get; set; }
 
@@ -35,7 +34,6 @@ namespace EveryBudgetApi.ViewModels
             this.PostingDate = uplTran.PostingDate;
             this.ReferenceNumber = uplTran.ReferenceNumber;
             this.TransactionCategory = uplTran.TransactionCategory;
-            this.TransactionID = uplTran.TransactionID;
             this.TransactionType = uplTran.TransactionType;
             this.Type = uplTran.Type;
         }

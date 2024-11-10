@@ -61,7 +61,7 @@ namespace EveryBudgetApi.Models
             this.PostingDate = viewModel.PostingDate;
             this.ReferenceNumber = viewModel.ReferenceNumber;
             this.TransactionCategory = viewModel.TransactionCategory;
-            this.TransactionID = viewModel.TransactionID;
+            //this.TransactionID = viewModel.TransactionID;
             this.TransactionType = viewModel.TransactionType;
             this.Type = viewModel.Type;
         }
